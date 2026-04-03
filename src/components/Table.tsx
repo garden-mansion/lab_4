@@ -3,6 +3,7 @@ import TableBody from './TableBody';
 import styles from '../css/Table.module.css'
 import { useState, type FC, type MouseEventHandler } from 'react';
 import type { Building } from '../data.js';
+import { Filter } from './Filter.js';
 
 /*
    компонент, выводящий на страницу таблицу 
@@ -19,12 +20,14 @@ interface TableProps {
 const Table: FC<TableProps> = (props) => {
 
     //количество страниц разбиения таблицы
-    const n = Math.ceil(props.data.length / props.amountRows);
+    const [dataTable, setDataTable] = useState<Building[]>(props.data);
+    const n = Math.ceil(dataTable.length / props.amountRows);
 
     // массив с номерами страниц
     const arr = Array.from({ length: n }, (_, i) => i + 1);
 
     const [currentPage, setCurrentPage] = useState(1);
+    const resetCurrentPage = () => setCurrentPage(1);
 
     const handlePageChange: MouseEventHandler<HTMLSpanElement> = (event) => {
         const value = +event.currentTarget.innerHTML;
@@ -52,9 +55,12 @@ const Table: FC<TableProps> = (props) => {
 
     return (
         <>
+            <h4>Фильтры</h4>
+            <Filter resetCurrentPage={resetCurrentPage} dataTable={dataTable} setDataTable={setDataTable} fullData={props.data} />
+
             <table className={styles['table']}>
                 <TableHead head={Object.keys(props.data[0])} />
-                <TableBody body={props.data} amountRows={props.amountRows} numPage={currentPage} isPaginationEnabled={props.isPaginationEnabled} />
+                <TableBody body={dataTable} amountRows={props.amountRows} numPage={currentPage} isPaginationEnabled={props.isPaginationEnabled} />
             </table>
 
             <div className={paginationClassName.join(' ')}>
