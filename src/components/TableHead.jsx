@@ -8,7 +8,7 @@ import TableRow from './TableRow.jsx';
 const TableHead = (props) => {
     return (
         <thead>
-            <TableRow row={props.head} isHead />
+            <TableRow row={props.head} isHead show />
         </thead>
     )
 }

@@ -2,6 +2,7 @@
     width: 75%;
     margin: auto;
     border-collapse: collapse;
+    margin-bottom: 1rem;
 }
 
 .table__th {
@@ -11,4 +12,28 @@
 .table__td {
     padding: 0.25rem;
     border: 1px solid black;
+}
+
+.pagination {
+    width: 75%;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1rem;
+    margin: auto;
+}
+
+.pagination--hide {
+    display: none;
+}
+
+.pagination__item {
+    cursor: pointer;
+}
+
+.pagination__item:hover:not(.pagination__item--highlighted) {
+    color: red;
+}
+
+.pagination__item--highlighted {
+    color: blue;
 }

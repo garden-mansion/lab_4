@@ -7,7 +7,7 @@ function App() {
     <div className="app">
       <h3>Самые высокие здания и сооружения</h3>
 
-      <Table data={buildings} />
+      <Table data={buildings} amountRows={10} isPaginationEnabled />
     </div>
   )
 }
