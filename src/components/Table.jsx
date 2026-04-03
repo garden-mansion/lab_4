@@ -19,6 +19,11 @@ const Table = (props) => {
 
     const [currentPage, setCurrentPage] = useState(1);
 
+    const handlePageChange = (event) => {
+        const value = +event.target.innerHTML;
+        setCurrentPage(value);
+    }
+
     // формируем совокупность span с номерами страниц
     const pages = arr.map((item) => {
         const className = [styles['pagination__item']]
@@ -27,7 +32,7 @@ const Table = (props) => {
             className.push(styles['pagination__item--highlighted'])
         }
 
-        return <span className={className.join(' ')} key={item}>{item}</span>
+        return <span className={className.join(' ')} key={item} onClick={handlePageChange}>{item}</span>
     }
     );
 
