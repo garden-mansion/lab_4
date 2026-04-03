@@ -1,7 +1,8 @@
-import TableHead from './TableHead.jsx';
-import TableBody from './TableBody.jsx';
+import TableHead from './TableHead.js';
+import TableBody from './TableBody';
 import styles from '../css/Table.module.css'
-import { useState } from 'react';
+import { useState, type FC, type MouseEventHandler } from 'react';
+import type { Building } from '../data.js';
 
 /*
    компонент, выводящий на страницу таблицу 
@@ -9,7 +10,13 @@ import { useState } from 'react';
       data - данные для таблицы в виде массива объектов
 */
 
-const Table = (props) => {
+interface TableProps {
+    amountRows: number;
+    isPaginationEnabled: boolean;
+    data: Building[]
+}
+
+const Table: FC<TableProps> = (props) => {
 
     //количество страниц разбиения таблицы
     const n = Math.ceil(props.data.length / props.amountRows);
@@ -19,8 +26,8 @@ const Table = (props) => {
 
     const [currentPage, setCurrentPage] = useState(1);
 
-    const handlePageChange = (event) => {
-        const value = +event.target.innerHTML;
+    const handlePageChange: MouseEventHandler<HTMLSpanElement> = (event) => {
+        const value = +event.currentTarget.innerHTML;
         setCurrentPage(value);
     }
 
@@ -40,7 +47,7 @@ const Table = (props) => {
 
     if (!props.isPaginationEnabled) {
         paginationClassName.push(styles['pagination--hide'])
-    } 
+    }
 
 
     return (

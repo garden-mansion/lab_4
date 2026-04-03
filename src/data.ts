@@ -1,0 +1,525 @@
+export interface Building {
+    title: string;
+    buildType: string;
+    country: string;
+    city: string;
+    year: number;
+    height: number;
+}
+
+const buildings: Building[] = [
+    {
+        title: "Бурдж-Халифа",
+        buildType: "Небоскрёб",
+        country: "ОАЭ",
+        city: "Дубай",
+        year: 2010,
+        height: 828
+    },
+    {
+        title: "Варшавская радиомачта",
+        buildType: "Антенная мачта",
+        country: "Польша",
+        city: "Константинов",
+        year: 1974,
+        height: 646.38
+    },
+    {
+        title: "Tokyo Skytree",
+        buildType: "Бетонная башня",
+        country: "Япония",
+        city: "Токио",
+        year: 2012,
+        height: 634
+    },
+    {
+        title: "Шанхайская башня",
+        buildType: "Небоскрёб",
+        country: "КНР",
+        city: "Шанхай",
+        year: 2013,
+        height: 632
+    },
+    {
+        title: "Телерадиомачта KVLY-TV",
+        buildType: "Радиомачта",
+        country: "США",
+        city: "Бланчард",
+        year: 1963,
+        height: 629
+    },
+    {
+        title: "Телебашня Гуанчжоу",
+        buildType: "Гиперболоидная башня",
+        country: "КНР",
+        city: "Гуанчжоу",
+        year: 2009,
+        height: 600
+    },
+    {
+        title: "Международный финансовый центр Пинань",
+        buildType: "Небоскрёб",
+        country: "КНР",
+        city: "Шэньчжэнь",
+        year: 2017,
+        height: 600
+    },
+    {
+        title: "Lotte World Tower",
+        buildType: "Небоскрёб",
+        country: "Южная Корея",
+        city: "Сеул",
+        year: 2017,
+        height: 555
+    },
+    {
+        title: "Си-Эн Тауэр",
+        buildType: "Бетонная башня",
+        country: "Канада",
+        city: "Торонто",
+        year: 1976,
+        height: 553
+    },
+    {
+        title: "Останкинская башня",
+        buildType: "Бетонная башня",
+        country: "Россия",
+        city: "Москва",
+        year: 1967,
+        height: 540.1
+    },
+    {
+        title: "Уиллис-тауэр",
+        buildType: "Небоскрёб",
+        country: "США",
+        city: "Чикаго",
+        year: 1974,
+        height: 527.3
+    },
+    {
+        title: "Тайбэй 101",
+        buildType: "Небоскрёб",
+        country: "Тайвань",
+        city: "Тайбэй",
+        year: 2004,
+        height: 509.2
+    },
+    {
+        title: "Шанхайский всемирный финансовый центр",
+        buildType: "Небоскрёб",
+        country: "КНР",
+        city: "Шанхай",
+        year: 2008,
+        height: 492
+    },
+    {
+        title: "Международный коммерческий центр",
+        buildType: "Небоскрёб",
+        country: "Гонконг",
+        city: "Гонконг",
+        year: 2009,
+        height: 484
+    },
+    {
+        title: "Восточная жемчужина",
+        buildType: "Бетонная башня",
+        country: "КНР",
+        city: "Шанхай",
+        year: 1994,
+        height: 467.9
+    },
+    {
+        title: "Лахта-центр",
+        buildType: "Небоскрёб",
+        country: "Россия",
+        city: "Санкт-Петербург",
+        year: 2018,
+        height: 462
+    },
+    {
+        title: "Landmark 81",
+        buildType: "Небоскрёб",
+        country: "Вьетнам",
+        city: "Хошимин",
+        year: 2018,
+        height: 461.2
+    },
+    {
+        title: "875 Норт-Мичиган-авеню",
+        buildType: "Небоскрёб",
+        country: "США",
+        city: "Чикаго",
+        year: 1969,
+        height: 457.2
+    },
+    {
+        title: "Петронас. башня 1 и 2",
+        buildType: "Небоскрёб",
+        country: "Малайзия",
+        city: "Куала-Лумпур",
+        year: 1998,
+        height: 452
+    },
+    {
+        title: "Финансовый центр Наньцзин-Гринлэнд",
+        buildType: "Небоскрёб",
+        country: "КНР",
+        city: "Нанкин",
+        year: 2009,
+        height: 450
+    },
+    {
+        title: "Эмпайр-стейт-билдинг",
+        buildType: "Небоскрёб",
+        country: "США",
+        city: "Нью-Йорк",
+        year: 1931,
+        height: 448.7
+    },
+    {
+        title: "Международный финансовый центр. башня зап.",
+        buildType: "Небоскрёб",
+        country: "КНР",
+        city: "Гуанчжоу",
+        year: 2010,
+        height: 437.5
+    },
+    {
+        title: "Kingkey 100",
+        buildType: "Небоскрёб",
+        country: "КНР",
+        city: "Шэньчжэнь",
+        year: 2011,
+        height: 439.8
+    },
+    {
+        title: "Бордже Милад",
+        buildType: "Бетонная башня",
+        country: "Иран",
+        city: "Тегеран",
+        year: 2003,
+        height: 435
+    },
+    {
+        title: "Парк-авеню. 432",
+        buildType: "Небоскрёб",
+        country: "США",
+        city: "Нью-Йорк",
+        year: 2015,
+        height: 425.5
+    },
+    {
+        title: "Международная гостиница и башня Трампа",
+        buildType: "Небоскрёб",
+        country: "США",
+        city: "Чикаго",
+        year: 2009,
+        height: 423.4
+    },
+    {
+        title: "Менара Куала-Лумпур",
+        buildType: "Бетонная башня",
+        country: "Малайзия",
+        city: "Куала-Лумпур",
+        year: 1995,
+        height: 421
+    },
+    {
+        title: "Цзинь Мао",
+        buildType: "Небоскрёб",
+        country: "КНР",
+        city: "Шанхай",
+        year: 1999,
+        height: 420.5
+    },
+    {
+        title: "Экибастузская ГРЭС-2",
+        buildType: "Дымовая труба",
+        country: "Казахстан",
+        city: "Экибастуз",
+        year: 1987,
+        height: 419.7
+    },
+    {
+        title: "Международный финансовый центр",
+        buildType: "Небоскрёб",
+        country: "Гонконг",
+        city: "Гонконг",
+        year: 2003,
+        height: 415.8
+    },
+    {
+        title: "Тяньцзиньская телебашня",
+        buildType: "Бетонная башня",
+        country: "КНР",
+        city: "Тяньцзинь",
+        year: 1991,
+        height: 415.2
+    },
+    {
+        title: "Башня Аль-Хамра",
+        buildType: "Небоскрёб",
+        country: "Кувейт",
+        city: "Кувейт",
+        year: 2010,
+        height: 412
+    },
+    {
+        title: "Пекинская телебашня",
+        buildType: "Бетонная башня",
+        country: "КНР",
+        city: "Пекин",
+        year: 1992,
+        height: 405
+    },
+    {
+        title: "Башня CITIC",
+        buildType: "Небоскрёб",
+        country: "КНР",
+        city: "Гуанчжоу",
+        year: 1997,
+        height: 391.1
+    },
+    {
+        title: "Киевская телебашня",
+        buildType: "Решётчатая мачта",
+        country: "Украина",
+        city: "Киев",
+        year: 1973,
+        height: 385
+    },
+    {
+        title: "Башня Сёньхин",
+        buildType: "Небоскрёб",
+        country: "КНР",
+        city: "Шэньчжэнь",
+        year: 1996,
+        height: 384
+    },
+    {
+        title: "Абу-Даби Плаза",
+        buildType: "Небоскрёб",
+        country: "Казахстан",
+        city: "Астана",
+        year: 2015,
+        height: 382
+    },
+    {
+        title: "Бурдж-Мохаммед-бин-Рашид",
+        buildType: "Небоскрёб",
+        country: "ОАЭ",
+        city: "Абу-Даби",
+        year: 2014,
+        height: 381
+    },
+    {
+        title: "Inco Superstack",
+        buildType: "Дымовая труба",
+        country: "Канада",
+        city: "Copper Cliff",
+        year: 1971,
+        height: 380
+    },
+    {
+        title: "Тантекс-Скай-Тауэр",
+        buildType: "Небоскрёб",
+        country: "Тайвань",
+        city: "Гаосюн",
+        year: 1997,
+        height: 378
+    },
+    {
+        title: "JW Marriott Marquis Dubai. 1 и 2",
+        buildType: "Небоскрёб",
+        country: "ОАЭ",
+        city: "Дубай",
+        year: 2010,
+        height: 376
+    },
+    {
+        title: "Ташкентская телебашня",
+        buildType: "Башня",
+        country: "Узбекистан",
+        city: "Ташкент",
+        year: 1985,
+        height: 374.9
+    },
+    {
+        title: "Башня Федерация «Восток»",
+        buildType: "Небоскрёб",
+        country: "Россия",
+        city: "Москва",
+        year: 2016,
+        height: 374
+    },
+    {
+        title: "Сентрал-плаза",
+        buildType: "Небоскрёб",
+        country: "Гонконг",
+        city: "Гонконг",
+        year: 1992,
+        height: 374
+    },
+    {
+        title: "Башня Освобождения",
+        buildType: "Бетонная башня",
+        country: "Кувейт",
+        city: "Кувейт",
+        year: 1996,
+        height: 372
+    },
+    {
+        title: "Телебашня «Коктобе»",
+        buildType: "Башня",
+        country: "Казахстан",
+        city: "Алматы",
+        year: 1983,
+        height: 371.5
+    },
+    {
+        title: "Дымовая труба электростанции",
+        buildType: "Дымовая труба",
+        country: "США",
+        city: "Homer City",
+        year: 1977,
+        height: 371
+    },
+    {
+        title: "Дымовая труба Берёзовской ГРЭС",
+        buildType: "Дымовая труба",
+        country: "Россия",
+        city: "Шарыпово",
+        year: 1985,
+        height: 370
+    },
+    {
+        title: "Рижская телебашня",
+        buildType: "Бетонная башня",
+        country: "Латвия",
+        city: "Рига",
+        year: 1987,
+        height: 368.5
+    },
+    {
+        title: "Берлинская телебашня",
+        buildType: "Бетонная башня",
+        country: "Германия",
+        city: "Берлин",
+        year: 1969,
+        height: 368
+    },
+    {
+        title: "Дымовая труба электростанции.",
+        buildType: "Дымовая труба",
+        country: "США",
+        city: "Маундсвилл",
+        year: 1968,
+        height: 367.6
+    },
+    {
+        title: "Башня Банка Китая",
+        buildType: "Небоскрёб",
+        country: "Гонконг",
+        city: "Гонконг",
+        year: 1990,
+        height: 367.4
+    },
+    {
+        title: "Башня Банка Америки",
+        buildType: "Небоскрёб",
+        country: "США",
+        city: "Нью-Йорк",
+        year: 2008,
+        height: 366
+    },
+    {
+        title: "Башня Алмас",
+        buildType: "Небоскрёб",
+        country: "ОАЭ",
+        city: "Дубай",
+        year: 2008,
+        height: 363
+    },
+    {
+        title: "Дымовая труба электростанции в Трбовле",
+        buildType: "Дымовая труба",
+        country: "Словения",
+        city: "Трбовле",
+        year: 1976,
+        height: 360
+    },
+    {
+        title: "Endesa Termic ",
+        buildType: "Дымовая труба",
+        country: "Испания",
+        city: "Ферроль",
+        year: 1974,
+        height: 356
+    },
+    {
+        title: "SEG Plaza",
+        buildType: "Небоскрёб",
+        country: "КНР",
+        city: "Шэньчжэнь",
+        year: 2000,
+        height: 355.8
+    },
+    {
+        title: "First Canadian Place",
+        buildType: "Небоскрёб",
+        country: "Канада",
+        city: "Торонто",
+        year: 1976,
+        height: 355
+    },
+    {
+        title: "Эмиратская офисная башня",
+        buildType: "Небоскрёб",
+        country: "ОАЭ",
+        city: "Дубай",
+        year: 2000,
+        height: 354.6
+    },
+    {
+        title: "ОКО Южная башня",
+        buildType: "Небоскрёб",
+        country: "Россия",
+        city: "Москва",
+        year: 2015,
+        height: 354
+    },
+    {
+        title: "Виннцкая телемачта",
+        buildType: "Радиомачта",
+        country: "Украина",
+        city: "Винница",
+        year: 1961,
+        height: 354
+    },
+    {
+        title: "Медеплавильный завод",
+        buildType: "Дымовая труба",
+        country: "Румыния",
+        city: "Бая-Маре",
+        year: 1995,
+        height: 351.5
+    },
+    {
+        title: "Стратосфера Лас-Вегас",
+        buildType: "Бетонная башня",
+        country: "США",
+        city: "Лас-Вегас",
+        year: 1996,
+        height: 350.2
+    },
+    {
+        title: "Дымовая труба Сырдарьинской электростанции",
+        buildType: "Дымовая труба",
+        country: "Узбекистан",
+        city: "Сырдарья",
+        year: 1980,
+        height: 350
+    }
+];
+
+export default buildings;

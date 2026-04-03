@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import styles from '../css/Table.module.css'
 
 /*
@@ -5,7 +6,14 @@ import styles from '../css/Table.module.css'
    пропсы:
       row - данные для формирования ячеек строки таблицы в виде массива
 */
-const TableRow = (props) => {
+
+interface TableRowProps {
+    row: string[];
+    isHead?: boolean;
+    show?: boolean;
+}
+
+const TableRow: FC<TableRowProps> = (props) => {
     if (!props.show) {
         return null;
     }

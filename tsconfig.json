@@ -1,0 +1,9 @@
+{
+    "extends": "@tsconfig/vite-react/tsconfig.json",
+    "include": ["./src/**/*"],
+    "exclude": ["**/*.spec.ts"],
+
+    "compilerOptions": {
+        "plugins": [{ "name": "typescript-plugin-css-modules" }]
+    }
+}

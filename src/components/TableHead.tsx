@@ -1,11 +1,17 @@
-import TableRow from './TableRow.jsx';
+import type { FC } from 'react';
+import TableRow from './TableRow.js';
 
 /*
    компонент, для вывода thead таблицы
    пропсы:
       head - данные для шапки таблицы в виде массива
 */
-const TableHead = (props) => {
+
+interface TableHeadProps {
+    head: string[];
+}
+
+const TableHead: FC<TableHeadProps> = (props) => {
     return (
         <thead>
             <TableRow row={props.head} isHead show />

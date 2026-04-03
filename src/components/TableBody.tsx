@@ -1,4 +1,6 @@
-import TableRow from './TableRow.jsx';
+import type { FC } from 'react';
+import TableRow from './TableRow.js';
+import type { Building } from '../data.js';
 
 /*
    компонент, для вывода tbody таблицы
@@ -7,7 +9,16 @@ import TableRow from './TableRow.jsx';
       numPage - номер текущей страницы
       amountRows - количество строк таблицы на странице
 */
-const TableBody = (props) => {
+
+
+interface TableBodyProps {
+    amountRows: number;
+    numPage: number;
+    isPaginationEnabled: boolean;
+    body: Building[]
+}
+
+const TableBody: FC<TableBodyProps> = (props) => {
     // номера строк, отображаемых на странице
     const begRange = (props.numPage - 1) * props.amountRows;
     const endRange = begRange + (+props.amountRows);
