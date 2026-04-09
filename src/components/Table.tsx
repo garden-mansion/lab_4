@@ -19,10 +19,10 @@ interface TableProps {
 	data: Building[];
 }
 
-const Table: FC<TableProps> = (props) => {
+const Table: FC<TableProps> = ({ amountRows, isPaginationEnabled, data }) => {
 	//количество страниц разбиения таблицы
-	const [dataTable, setDataTable] = useState<Building[]>(props.data);
-	const n = Math.ceil(dataTable.length / props.amountRows);
+	const [dataTable, setDataTable] = useState<Building[]>(data);
+	const n = Math.ceil(dataTable.length / amountRows);
 
 	// массив с номерами страниц
 	const arr = Array.from({ length: n }, (_, i) => i + 1);
@@ -56,7 +56,7 @@ const Table: FC<TableProps> = (props) => {
 
 	const paginationClassName = [styles['pagination']];
 
-	if (!props.isPaginationEnabled) {
+	if (!isPaginationEnabled) {
 		paginationClassName.push(styles['pagination--hide']);
 	}
 
@@ -65,18 +65,17 @@ const Table: FC<TableProps> = (props) => {
 			<h4>Фильтры</h4>
 			<Filter
 				resetCurrentPage={resetCurrentPage}
-				dataTable={dataTable}
 				setDataTable={setDataTable}
-				fullData={props.data}
+				fullData={data}
 			/>
 
 			<table className={styles['table']}>
-				<TableHead head={Object.keys(props.data[0])} />
+				<TableHead head={Object.keys(data[0])} />
 				<TableBody
 					body={dataTable}
-					amountRows={props.amountRows}
+					amountRows={amountRows}
 					numPage={currentPage}
-					isPaginationEnabled={props.isPaginationEnabled}
+					isPaginationEnabled={isPaginationEnabled}
 				/>
 			</table>
 

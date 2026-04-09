@@ -1,3 +1,4 @@
+import { Chart } from './components/Chart';
 import Table from './components/Table';
 
 import './css/App.css';
@@ -7,6 +8,8 @@ function App() {
 	return (
 		<div className="app">
 			<h3>Самые высокие здания и сооружения</h3>
+
+			<Chart />
 
 			<Table data={buildings} amountRows={10} isPaginationEnabled />
 		</div>

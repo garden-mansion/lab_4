@@ -18,13 +18,18 @@ interface TableBodyProps {
 	body: Building[];
 }
 
-const TableBody: FC<TableBodyProps> = (props) => {
+const TableBody: FC<TableBodyProps> = ({
+	amountRows,
+	numPage,
+	isPaginationEnabled,
+	body,
+}) => {
 	// номера строк, отображаемых на странице
-	const begRange = (props.numPage - 1) * props.amountRows;
-	const endRange = begRange + +props.amountRows;
+	const begRange = (numPage - 1) * amountRows;
+	const endRange = begRange + amountRows;
 
-	if (props.isPaginationEnabled) {
-		const tbody = props.body.map((item, index) => (
+	if (isPaginationEnabled) {
+		const tbody = body.map((item, index) => (
 			<TableRow
 				key={index}
 				row={Object.values(item)}
@@ -35,7 +40,7 @@ const TableBody: FC<TableBodyProps> = (props) => {
 		return <tbody>{tbody}</tbody>;
 	}
 
-	const tbody = props.body.map((item, index) => (
+	const tbody = body.map((item, index) => (
 		<TableRow key={index} row={Object.values(item)} show />
 	));
 

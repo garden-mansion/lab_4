@@ -12,10 +12,10 @@ interface TableHeadProps {
 	head: string[];
 }
 
-const TableHead: FC<TableHeadProps> = (props) => {
+const TableHead: FC<TableHeadProps> = ({ head }) => {
 	return (
 		<thead>
-			<TableRow row={props.head} isHead show />
+			<TableRow row={head} isHead show />
 		</thead>
 	);
 };

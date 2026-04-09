@@ -14,13 +14,13 @@ interface TableRowProps {
 	show?: boolean;
 }
 
-const TableRow: FC<TableRowProps> = (props) => {
-	if (!props.show) {
+const TableRow: FC<TableRowProps> = ({ row, isHead, show }) => {
+	if (!show) {
 		return null;
 	}
 
-	const cells = props.isHead
-		? props.row.map((item, index) => (
+	const cells = isHead
+		? row.map((item, index) => (
 				<th
 					className={`${styles['table__td']} ${styles['table__th']}`}
 					key={index}
@@ -28,7 +28,7 @@ const TableRow: FC<TableRowProps> = (props) => {
 					{item}
 				</th>
 			))
-		: props.row.map((item, index) => (
+		: row.map((item, index) => (
 				<td className={styles['table__td']} key={index}>
 					{item}
 				</td>

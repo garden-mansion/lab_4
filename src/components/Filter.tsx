@@ -9,13 +9,16 @@ import type {
 import type { Building } from '../data';
 
 interface FilterProps {
-	dataTable: Building[];
 	setDataTable: Dispatch<SetStateAction<Building[]>>;
 	fullData: Building[];
 	resetCurrentPage: () => void;
 }
 
-export const Filter: FC<FilterProps> = (props) => {
+export const Filter: FC<FilterProps> = ({
+	setDataTable,
+	fullData,
+	resetCurrentPage,
+}) => {
 	const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
@@ -45,7 +48,7 @@ export const Filter: FC<FilterProps> = (props) => {
 		};
 
 		//фильтруем данные по значениям всех полей формы
-		let arr: Building[] = props.fullData;
+		let arr: Building[] = fullData;
 		for (const key in filterField) {
 			if (
 				key !== 'title' &&
@@ -84,13 +87,13 @@ export const Filter: FC<FilterProps> = (props) => {
 			});
 		}
 
-		props.setDataTable(arr);
-		props.resetCurrentPage();
+		setDataTable(arr);
+		resetCurrentPage();
 	};
 
 	const handleClear: MouseEventHandler<HTMLButtonElement> = () => {
-		props.setDataTable(props.fullData);
-		props.resetCurrentPage();
+		setDataTable(fullData);
+		resetCurrentPage();
 	};
 
 	return (
