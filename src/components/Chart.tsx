@@ -1,13 +1,15 @@
 import { useState, type FC, type SubmitEventHandler } from 'react';
 
 import type { Building } from '../data';
+import { createArrGraph } from '../lib/createArrGraph';
 import { ChartDraw } from './ChartDraw';
 
-// interface ChartProps {}
+interface ChartProps {
+	data: Building[];
+}
 
-// export const Chart: FC<ChartProps> = () => {
-export const Chart: FC = () => {
-	const [ox, setOx] = useState<keyof Building>('country');
+export const Chart: FC<ChartProps> = ({ data }) => {
+	const [ox, setOx] = useState<'country' | 'year'>('country');
 	const [oy, setOy] = useState<{ maxValue: boolean; minValue: boolean }>({
 		maxValue: true,
 		minValue: false,
@@ -59,7 +61,7 @@ export const Chart: FC = () => {
 				</p>
 			</form>
 
-			<ChartDraw />
+			<ChartDraw data={createArrGraph(data, ox)} />
 		</>
 	);
 };

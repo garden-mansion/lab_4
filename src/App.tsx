@@ -9,7 +9,7 @@ function App() {
 		<div className="app">
 			<h3>Самые высокие здания и сооружения</h3>
 
-			<Chart />
+			<Chart data={buildings} />
 
 			<Table data={buildings} amountRows={10} isPaginationEnabled />
 		</div>
