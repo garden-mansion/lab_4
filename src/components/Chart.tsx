@@ -1,10 +1,12 @@
 import { useState, type FC, type SubmitEventHandler } from 'react';
 
 import type { Building } from '../data';
+import { ChartDraw } from './ChartDraw';
 
-interface ChartProps {}
+// interface ChartProps {}
 
-export const Chart: FC<ChartProps> = () => {
+// export const Chart: FC<ChartProps> = () => {
+export const Chart: FC = () => {
 	const [ox, setOx] = useState<keyof Building>('country');
 	const [oy, setOy] = useState<{ maxValue: boolean; minValue: boolean }>({
 		maxValue: true,
@@ -56,6 +58,8 @@ export const Chart: FC<ChartProps> = () => {
 					<button type="submit">Построить </button>
 				</p>
 			</form>
+
+			<ChartDraw />
 		</>
 	);
 };
