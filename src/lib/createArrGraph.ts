@@ -15,5 +15,9 @@ export const createArrGraph = (data: Building[], key: 'country' | 'year') => {
 		arrGraph.push({ labelX: entry[0], values: minMax });
 	}
 
+	if (key === 'year') {
+		arrGraph.sort((a, b) => +a.labelX - +b.labelX);
+	}
+
 	return arrGraph;
 };
