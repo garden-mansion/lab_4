@@ -1,5 +1,6 @@
 import type { FC } from 'react';
-import styles from '../css/Table.module.css'
+
+import styles from '../css/Table.module.css';
 
 /*
    компонент, для вывода строки таблицы
@@ -8,24 +9,31 @@ import styles from '../css/Table.module.css'
 */
 
 interface TableRowProps {
-    row: string[];
-    isHead?: boolean;
-    show?: boolean;
+	row: string[];
+	isHead?: boolean;
+	show?: boolean;
 }
 
 const TableRow: FC<TableRowProps> = (props) => {
-    if (!props.show) {
-        return null;
-    }
+	if (!props.show) {
+		return null;
+	}
 
-    const cells = (props.isHead) 
-        ? props.row.map((item, index) => <th className={`${styles['table__td']} ${styles['table__th']}`} key={ index }>{item}</th>) 
-        : props.row.map((item, index) => <td className={styles['table__td']} key={ index }>{item}</td>);
-    return(
-        <tr> 
-           {cells} 
-        </tr>
-    )
-}
+	const cells = props.isHead
+		? props.row.map((item, index) => (
+				<th
+					className={`${styles['table__td']} ${styles['table__th']}`}
+					key={index}
+				>
+					{item}
+				</th>
+			))
+		: props.row.map((item, index) => (
+				<td className={styles['table__td']} key={index}>
+					{item}
+				</td>
+			));
+	return <tr>{cells}</tr>;
+};
 
 export default TableRow;

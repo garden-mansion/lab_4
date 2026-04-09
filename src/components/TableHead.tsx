@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+
 import TableRow from './TableRow.js';
 
 /*
@@ -8,15 +9,15 @@ import TableRow from './TableRow.js';
 */
 
 interface TableHeadProps {
-    head: string[];
+	head: string[];
 }
 
 const TableHead: FC<TableHeadProps> = (props) => {
-    return (
-        <thead>
-            <TableRow row={props.head} isHead show />
-        </thead>
-    )
-}
+	return (
+		<thead>
+			<TableRow row={props.head} isHead show />
+		</thead>
+	);
+};
 
 export default TableHead;
