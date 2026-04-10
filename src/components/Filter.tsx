@@ -1,136 +1,53 @@
-import type { FC, MouseEventHandler, SubmitEvent } from 'react';
+import type { FC } from 'react';
 
-import { useBuildingsContext } from '../context/BuildingsContext';
-import type { Building } from '../data';
+import { useFilterClearHandler } from '../lib/useFilterClearHandler';
+import { useFilterSubmitHandler } from '../lib/useFilterSubmitHandler';
+import { LabeledInput } from './LabeledInput';
 
 interface FilterProps {
 	resetCurrentPage: () => void;
 }
 
 export const Filter: FC<FilterProps> = ({ resetCurrentPage }) => {
-	const { setCurrentBuildings, allBuildings, resetBuildings } =
-		useBuildingsContext();
-
-	const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
-		event.preventDefault();
-
-		const formData = new FormData(event.currentTarget);
-
-		// создаем словарь со значениями полей формы
-		const filterField: Pick<
-			Building,
-			'title' | 'buildType' | 'country' | 'city'
-		> & {
-			yearFrom: number;
-			yearTo: number;
-			heightFrom: number;
-			heightTo: number;
-		} = {
-			title: formData.get('title')!.toString().toLowerCase(),
-			buildType: formData.get('buildType')!.toString().toLowerCase(),
-			country: formData.get('country')!.toString().toLowerCase(),
-			city: formData.get('city')!.toString().toLowerCase(),
-
-			yearFrom: formData.get('year-from') ? +formData.get('year-from')! : 0,
-			yearTo: formData.get('year-to') ? +formData.get('year-to')! : 0,
-			heightFrom: formData.get('height-from')
-				? +formData.get('height-from')!
-				: 0,
-			heightTo: formData.get('height-to') ? +formData.get('height-to')! : 0,
-		};
-
-		//фильтруем данные по значениям всех полей формы
-		let arr: Building[] = allBuildings;
-		for (const key in filterField) {
-			if (
-				key !== 'title' &&
-				key !== 'buildType' &&
-				key !== 'country' &&
-				key !== 'city' &&
-				key !== 'yearFrom' &&
-				key !== 'yearTo' &&
-				key !== 'heightFrom' &&
-				key !== 'heightTo'
-			)
-				continue;
-
-			arr = arr.filter((item) => {
-				if (
-					key === 'buildType' ||
-					key === 'title' ||
-					key === 'country' ||
-					key === 'city'
-				) {
-					const stringCheckResult = item[key]
-						.toLowerCase()
-						.includes(filterField[key]);
-
-					return stringCheckResult;
-				}
-				const year = item.year;
-				const height = item.height;
-
-				if (!filterField[key]) return true;
-
-				if (key === 'yearFrom') return year >= filterField[key];
-				if (key === 'yearTo') return year <= filterField[key];
-				if (key === 'heightFrom') return height >= filterField[key];
-				if (key === 'heightTo') return height <= filterField[key];
-			});
-		}
-
-		setCurrentBuildings(arr);
-		resetCurrentPage();
-	};
-
-	const handleClear: MouseEventHandler<HTMLButtonElement> = () => {
-		resetBuildings();
-		resetCurrentPage();
-	};
+	const { handleFilterSubmit } = useFilterSubmitHandler(resetCurrentPage);
+	const { handleFilterClear } = useFilterClearHandler(resetCurrentPage);
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<p>
-				<label htmlFor="title">Название:</label>
-				<input name="title" id="title" type="text" />
-			</p>
-			<p>
-				<label htmlFor="buildType">Type:</label>
-				<input name="buildType" id="buildType" type="text" />
-			</p>
+		<form onSubmit={handleFilterSubmit}>
+			<LabeledInput name="title" label="Название" type="text" />
+			<LabeledInput name="buildType" label="Тип" type="text" />
+			<LabeledInput name="country" label="Страна" type="text" />
+			<LabeledInput name="city" label="Город" type="text" />
 
-			<p>
-				<label htmlFor="country">Страна</label>
-				<input type="text" name="country" id="country" />
-			</p>
+			<LabeledInput
+				name="year-from"
+				label="Год от"
+				type="number"
+				rest={{ min: 1000 }}
+			/>
+			<LabeledInput
+				name="year-to"
+				label="Год до"
+				type="number"
+				rest={{ min: 1000 }}
+			/>
 
-			<p>
-				<label htmlFor="city">Город</label>
-				<input type="text" name="city" id="city" />
-			</p>
+			<LabeledInput
+				name="height-from"
+				label="Высота от"
+				type="number"
+				rest={{ min: 1 }}
+			/>
+			<LabeledInput
+				name="height-to"
+				label="Высота до"
+				type="number"
+				rest={{ min: 1 }}
+			/>
 
-			<p>
-				<label htmlFor="year-from">Год от</label>
-				<input type="number" name="year-from" id="year-from" min={1000} />
-			</p>
-
-			<p>
-				<label htmlFor="year-to">Год до</label>
-				<input type="number" name="year-to" id="year-to" min={1000} />
-			</p>
-
-			<p>
-				<label htmlFor="height-from">Высота от</label>
-				<input type="number" name="height-from" id="height-from" min={1} />
-			</p>
-
-			<p>
-				<label htmlFor="height-to">Высота до</label>
-				<input type="number" name="height-to" id="height-to" min={1} />
-			</p>
 			<p>
 				<button type="submit">Фильтровать</button>
-				<button type="reset" onClick={handleClear}>
+				<button type="reset" onClick={handleFilterClear}>
 					Очистить фильтр
 				</button>
 			</p>

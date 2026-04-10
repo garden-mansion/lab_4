@@ -1,15 +1,7 @@
 import type { FC } from 'react';
 
 import type { Building } from '../data.js';
-import TableRow from './TableRow.js';
-
-/*
-   компонент, для вывода tbody таблицы
-   пропсы:
-      body - данные для таблицы в виде массива объектов
-      numPage - номер текущей страницы
-      amountRows - количество строк таблицы на странице
-*/
+import { getBuildingToRowMapper } from '../lib/getBuildingToRowMapper.js';
 
 interface TableBodyProps {
 	amountRows: number;
@@ -24,25 +16,16 @@ const TableBody: FC<TableBodyProps> = ({
 	isPaginationEnabled,
 	body,
 }) => {
-	// номера строк, отображаемых на странице
-	const begRange = (numPage - 1) * amountRows;
-	const endRange = begRange + amountRows;
+	let begRange: number | undefined;
+	let endRange: number | undefined;
 
 	if (isPaginationEnabled) {
-		const tbody = body.map((item, index) => (
-			<TableRow
-				key={index}
-				row={Object.values(item)}
-				show={index >= begRange && index < endRange}
-			/>
-		));
-
-		return <tbody>{tbody}</tbody>;
+		begRange = (numPage - 1) * amountRows;
+		endRange = begRange + amountRows;
 	}
 
-	const tbody = body.map((item, index) => (
-		<TableRow key={index} row={Object.values(item)} show />
-	));
+	const mapBuildingToRow = getBuildingToRowMapper({ begRange, endRange });
+	const tbody = body.map(mapBuildingToRow);
 
 	return <tbody>{tbody}</tbody>;
 };

@@ -22,7 +22,7 @@
 	margin: auto;
 }
 
-.pagination--hide {
+.pagination_hide {
 	display: none;
 }
 
@@ -30,10 +30,10 @@
 	cursor: pointer;
 }
 
-.pagination__item:hover:not(.pagination__item--highlighted) {
+.pagination__item:hover:not(.pagination__item_highlighted) {
 	color: red;
 }
 
-.pagination__item--highlighted {
+.pagination__item_highlighted {
 	color: blue;
 }

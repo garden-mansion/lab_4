@@ -36,10 +36,10 @@ const Table: FC<TableProps> = ({ amountRows, isPaginationEnabled }) => {
 
 	// формируем совокупность span с номерами страниц
 	const pages = arr.map((item) => {
-		const className = [styles['pagination__item']];
+		const className = [styles.pagination__item];
 
 		if (item === currentPage) {
-			className.push(styles['pagination__item--highlighted']);
+			className.push(styles.pagination__item_highlighted);
 		}
 
 		return (
@@ -53,10 +53,10 @@ const Table: FC<TableProps> = ({ amountRows, isPaginationEnabled }) => {
 		);
 	});
 
-	const paginationClassName = [styles['pagination']];
+	const paginationClassName = [styles.pagination];
 
 	if (!isPaginationEnabled) {
-		paginationClassName.push(styles['pagination--hide']);
+		paginationClassName.push(styles.pagination_hide);
 	}
 
 	return (
@@ -64,7 +64,7 @@ const Table: FC<TableProps> = ({ amountRows, isPaginationEnabled }) => {
 			<h4>Фильтры</h4>
 			<Filter resetCurrentPage={resetCurrentPage} />
 
-			<table className={styles['table']}>
+			<table className={styles.table}>
 				<TableHead head={Object.keys(allBuildings[0])} />
 				<TableBody
 					body={currentBuildings}
