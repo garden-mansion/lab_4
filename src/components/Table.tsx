@@ -1,6 +1,6 @@
 import { useState, type FC, type MouseEventHandler } from 'react';
 
-import type { Building } from '../data.js';
+import { useBuildingsContext } from '../context/BuildingsContext.js';
 import { Filter } from './Filter.js';
 import TableBody from './TableBody';
 import TableHead from './TableHead.js';
@@ -16,13 +16,12 @@ import styles from '../css/Table.module.css';
 interface TableProps {
 	amountRows: number;
 	isPaginationEnabled: boolean;
-	data: Building[];
 }
 
-const Table: FC<TableProps> = ({ amountRows, isPaginationEnabled, data }) => {
+const Table: FC<TableProps> = ({ amountRows, isPaginationEnabled }) => {
 	//количество страниц разбиения таблицы
-	const [dataTable, setDataTable] = useState<Building[]>(data);
-	const n = Math.ceil(dataTable.length / amountRows);
+	const { currentBuildings, allBuildings } = useBuildingsContext();
+	const n = Math.ceil(currentBuildings.length / amountRows);
 
 	// массив с номерами страниц
 	const arr = Array.from({ length: n }, (_, i) => i + 1);
@@ -63,16 +62,12 @@ const Table: FC<TableProps> = ({ amountRows, isPaginationEnabled, data }) => {
 	return (
 		<>
 			<h4>Фильтры</h4>
-			<Filter
-				resetCurrentPage={resetCurrentPage}
-				setDataTable={setDataTable}
-				fullData={data}
-			/>
+			<Filter resetCurrentPage={resetCurrentPage} />
 
 			<table className={styles['table']}>
-				<TableHead head={Object.keys(data[0])} />
+				<TableHead head={Object.keys(allBuildings[0])} />
 				<TableBody
-					body={dataTable}
+					body={currentBuildings}
 					amountRows={amountRows}
 					numPage={currentPage}
 					isPaginationEnabled={isPaginationEnabled}

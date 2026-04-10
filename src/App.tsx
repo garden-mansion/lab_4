@@ -1,18 +1,38 @@
+import { useMemo, useState } from 'react';
+
 import { Chart } from './components/Chart';
 import Table from './components/Table';
 
 import './css/App.css';
-import buildings from './data';
+import {
+	BuildingsContext,
+	type BuildingsContextType,
+} from './context/BuildingsContext';
+import buildings, { type Building } from './data';
 
 function App() {
+	const [currentBuildings, setCurrentBuildings] =
+		useState<Building[]>(buildings);
+
+	const buildingsContextValue = useMemo<BuildingsContextType>(
+		() => ({
+			currentBuildings,
+			setCurrentBuildings,
+			allBuildings: buildings,
+		}),
+		[currentBuildings, setCurrentBuildings],
+	);
+
 	return (
-		<div className="app">
-			<h3>Самые высокие здания и сооружения</h3>
+		<BuildingsContext.Provider value={buildingsContextValue}>
+			<div className="app">
+				<h3>Самые высокие здания и сооружения</h3>
 
-			<Chart data={buildings} />
+				<Chart />
 
-			<Table data={buildings} amountRows={10} isPaginationEnabled />
-		</div>
+				<Table amountRows={10} isPaginationEnabled />
+			</div>
+		</BuildingsContext.Provider>
 	);
 }
 

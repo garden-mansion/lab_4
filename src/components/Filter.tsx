@@ -1,24 +1,16 @@
-import type {
-	Dispatch,
-	FC,
-	MouseEventHandler,
-	SetStateAction,
-	SubmitEvent,
-} from 'react';
+import type { FC, MouseEventHandler, SubmitEvent } from 'react';
 
+import { useBuildingsContext } from '../context/BuildingsContext';
 import type { Building } from '../data';
 
 interface FilterProps {
-	setDataTable: Dispatch<SetStateAction<Building[]>>;
-	fullData: Building[];
 	resetCurrentPage: () => void;
 }
 
-export const Filter: FC<FilterProps> = ({
-	setDataTable,
-	fullData,
-	resetCurrentPage,
-}) => {
+export const Filter: FC<FilterProps> = ({ resetCurrentPage }) => {
+	const { setCurrentBuildings, allBuildings, resetBuildings } =
+		useBuildingsContext();
+
 	const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
@@ -48,7 +40,7 @@ export const Filter: FC<FilterProps> = ({
 		};
 
 		//фильтруем данные по значениям всех полей формы
-		let arr: Building[] = fullData;
+		let arr: Building[] = allBuildings;
 		for (const key in filterField) {
 			if (
 				key !== 'title' &&
@@ -87,12 +79,12 @@ export const Filter: FC<FilterProps> = ({
 			});
 		}
 
-		setDataTable(arr);
+		setCurrentBuildings(arr);
 		resetCurrentPage();
 	};
 
 	const handleClear: MouseEventHandler<HTMLButtonElement> = () => {
-		setDataTable(fullData);
+		resetBuildings();
 		resetCurrentPage();
 	};
 

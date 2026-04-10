@@ -5,17 +5,15 @@ import {
 	type SubmitEventHandler,
 } from 'react';
 
-import type { Building } from '../data';
+import { useBuildingsContext } from '../context/BuildingsContext';
 import { createArrGraph } from '../lib/createArrGraph';
 import { ChartDraw } from './ChartDraw';
 
 import styles from '../css/Chart.module.scss';
 
-interface ChartProps {
-	data: Building[];
-}
+export const Chart: FC = () => {
+	const { currentBuildings } = useBuildingsContext();
 
-export const Chart: FC<ChartProps> = ({ data }) => {
 	const [ox, setOx] = useState<'country' | 'year'>('country');
 	const [oy, setOy] = useState<{ maxValue: boolean; minValue: boolean }>({
 		maxValue: true,
@@ -101,7 +99,7 @@ export const Chart: FC<ChartProps> = ({ data }) => {
 			</form>
 
 			<ChartDraw
-				data={createArrGraph(data, ox)}
+				data={createArrGraph(currentBuildings, ox)}
 				isMaxValuesDrawEnabled={oy.maxValue}
 				isMinValuesDrawEnabled={oy.minValue}
 			/>
