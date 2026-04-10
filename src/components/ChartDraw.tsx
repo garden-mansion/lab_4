@@ -6,9 +6,15 @@ interface ChartDrawProps {
 		labelX: string | number;
 		values: [number, number];
 	}[];
+	isMaxValuesDrawEnabled: boolean;
+	isMinValuesDrawEnabled: boolean;
 }
 
-export const ChartDraw: FC<ChartDrawProps> = ({ data }) => {
+export const ChartDraw: FC<ChartDrawProps> = ({
+	data,
+	isMaxValuesDrawEnabled,
+	isMinValuesDrawEnabled,
+}) => {
 	const chartRef = useRef<SVGSVGElement>(null);
 
 	const [width, setWidth] = useState(0);
@@ -45,7 +51,7 @@ export const ChartDraw: FC<ChartDrawProps> = ({ data }) => {
 			.style('fill', 'red');
 	}, []);
 
-	const indexOY = 1; // диаграмма для максимальных значений
+	// const indexOY = 0; // диаграмма для максимальных значений
 	let [min, max] = d3.extent(data.map((d) => d.values[1])) as [number, number];
 
 	// формируем шкалы для осей
@@ -64,6 +70,10 @@ export const ChartDraw: FC<ChartDrawProps> = ({ data }) => {
 	}, [boundsHeight, min, max]);
 
 	useEffect(() => {
+		if (!isMinValuesDrawEnabled && !isMaxValuesDrawEnabled) {
+			return;
+		}
+
 		const svg = d3.select(chartRef.current);
 		svg.selectAll('*').remove();
 
@@ -86,17 +96,52 @@ export const ChartDraw: FC<ChartDrawProps> = ({ data }) => {
 			.call(yAxis);
 
 		//рисуем график
-		svg
-			.selectAll('.dot')
-			.data(data)
-			.enter()
-			.append('circle')
-			.attr('r', 5)
-			.attr('cx', (d) => scaleX(d.labelX.toString())! + scaleX.bandwidth() / 2)
-			.attr('cy', (d) => scaleY(d.values[indexOY]))
-			.attr('transform', `translate(${margin.left}, ${margin.top})`)
-			.style('fill', 'red');
-	}, [scaleX, scaleY, data, height, margin.bottom, margin.left, margin.top]);
+		// минимальные значения
+		if (isMinValuesDrawEnabled) {
+			svg
+				.selectAll('.dot')
+				.data(data)
+				.enter()
+				.append('circle')
+				.attr('r', 5)
+				.attr(
+					'cx',
+					(d) => scaleX(d.labelX.toString())! + scaleX.bandwidth() / 2,
+				)
+				.attr('cy', (d) => scaleY(d.values[0]))
+				.attr('transform', `translate(${margin.left}, ${margin.top})`)
+				.style('fill', 'blue');
+		}
+
+		// максимальные значения
+		if (isMaxValuesDrawEnabled) {
+			svg
+				.selectAll('.dot')
+				.data(data)
+				.enter()
+				.append('circle')
+				.attr('r', 5)
+				.attr(
+					'cx',
+					(d) => scaleX(d.labelX.toString())! + scaleX.bandwidth() / 2,
+				)
+				.attr('cy', (d) => scaleY(d.values[1]) - 3)
+				.attr('transform', `translate(${margin.left}, ${margin.top})`)
+				.style('fill', 'rgba(255, 0, 0, 0.75)');
+
+			return;
+		}
+	}, [
+		scaleX,
+		scaleY,
+		data,
+		height,
+		margin.bottom,
+		margin.left,
+		margin.top,
+		isMaxValuesDrawEnabled,
+		isMinValuesDrawEnabled,
+	]);
 
 	return <svg ref={chartRef}></svg>;
 };
