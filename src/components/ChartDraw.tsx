@@ -20,7 +20,7 @@ export const ChartDraw: FC<ChartDrawProps> = ({
 	const chartRef = useRef<SVGSVGElement>(null);
 	const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-	// Используем useLayoutEffect, чтобы замерить контейнер сразу после вставки в DOM
+	// чтобы замерить контейнер сразу после вставки в DOM
 	useEffect(() => {
 		if (chartRef.current) {
 			const { width, height } = chartRef.current.getBoundingClientRect();
@@ -43,7 +43,7 @@ export const ChartDraw: FC<ChartDrawProps> = ({
 	const boundsWidth = width - margin.left - margin.right;
 	const boundsHeight = height - margin.top - margin.bottom;
 
-	// Расчет лимитов оси Y
+	// расчет лимитов оси Y
 	const [min, max] = useMemo(() => {
 		const allValues: number[] = [];
 		if (isMinValuesDrawEnabled) allValues.push(...data.map((d) => d.values[0]));

@@ -1,21 +1,21 @@
-import {
-	useState,
-	type ChangeEventHandler,
-	type FC,
-	type SubmitEventHandler,
-} from 'react';
+import { useState, type FC } from 'react';
 
 import { useBuildingsContext } from '../context/BuildingsContext';
 import { createArrGraph } from '../lib/createArrGraph';
+import { getChartOyCheckboxesChangeHandler } from '../lib/getChartOyCheckboxesChangeHandler';
+import { getChartSubmitHandler } from '../lib/getChartSubmitHandler';
+import type { ChartType, OXType, OYSettings } from '../types/chartTypes';
 import { ChartDraw } from './ChartDraw';
+import { OXRadioButton } from './OXRadioButton';
+import { OYCheckbox } from './OYCheckbox';
 
 import styles from '../css/Chart.module.scss';
 
 export const Chart: FC = () => {
 	const { currentBuildings } = useBuildingsContext();
 
-	const [ox, setOx] = useState<'country' | 'year'>('country');
-	const [oy, setOy] = useState<{ maxValue: boolean; minValue: boolean }>({
+	const [ox, setOx] = useState<OXType>('country');
+	const [oy, setOy] = useState<OYSettings>({
 		maxValue: true,
 		minValue: false,
 	});
@@ -23,74 +23,47 @@ export const Chart: FC = () => {
 	const [noOyValuesErrorClassName, setNoOyValuesErrorClassName] = useState(
 		styles.noOyValuesError_hidden,
 	);
+	const [chartType, setChartType] = useState<ChartType>('dot');
 
-	const handleSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
-		event.preventDefault();
+	const { handleChartSubmit } = getChartSubmitHandler({
+		setNoOyValuesErrorClassName,
+		setOx,
+		setOy,
+		setChartType,
+	});
 
-		if (!event.target['oy'][0].checked && !event.target['oy'][1].checked) {
-			setNoOyValuesErrorClassName(styles.noOyValuesError);
-		}
-
-		setOx(event.target['ox'].value);
-		setOy({
-			maxValue: event.target['oy'][0].checked,
-			minValue: event.target['oy'][1].checked,
-		});
-
-		setChartType(event.target['chart-type'].value);
-	};
-
-	const handleOyCheckboxesChange: ChangeEventHandler<HTMLInputElement> = (
-		event,
-	) => {
-		const { checked } = event.currentTarget;
-
-		if (checked) {
-			setNoOyValuesErrorClassName(styles.noOyValuesError_hidden);
-		}
-	};
-
-	const [chartType, setChartType] = useState<'bar' | 'dot'>('dot');
+	const { handleOyCheckboxesChange } = getChartOyCheckboxesChangeHandler(
+		setNoOyValuesErrorClassName,
+	);
 
 	return (
 		<>
 			<h4>Визуализация</h4>
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleChartSubmit}>
 				<p> Значение по оси OX: </p>
 				<div>
-					<input
-						type="radio"
-						name="ox"
-						value="country"
-						defaultChecked={ox === 'country'}
-					/>
-					Страна
-					<br />
-					<input
-						type="radio"
-						name="ox"
-						value="year"
-						defaultChecked={ox === 'year'}
-					/>
-					Год
+					<OXRadioButton value="country" ox={ox}>
+						Страна
+					</OXRadioButton>
+					<OXRadioButton value="year" ox={ox}>
+						Год
+					</OXRadioButton>
 				</div>
 
 				<p> Значение по оси OY </p>
 				<div>
-					<input
-						type="checkbox"
-						name="oy"
+					<OYCheckbox
 						defaultChecked={oy.maxValue}
-						onChange={handleOyCheckboxesChange}
-					/>
-					Максимальная высота <br />
-					<input
-						type="checkbox"
-						name="oy"
+						handleOyCheckboxesChange={handleOyCheckboxesChange}
+					>
+						Максимальная высота
+					</OYCheckbox>
+					<OYCheckbox
 						defaultChecked={oy.minValue}
-						onChange={handleOyCheckboxesChange}
-					/>
-					Минимальная высота
+						handleOyCheckboxesChange={handleOyCheckboxesChange}
+					>
+						Минимальная высота
+					</OYCheckbox>
 				</div>
 
 				<p>
