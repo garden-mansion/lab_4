@@ -36,6 +36,8 @@ export const Chart: FC = () => {
 			maxValue: event.target['oy'][0].checked,
 			minValue: event.target['oy'][1].checked,
 		});
+
+		setChartType(event.target['chart-type'].value);
 	};
 
 	const handleOyCheckboxesChange: ChangeEventHandler<HTMLInputElement> = (
@@ -47,6 +49,8 @@ export const Chart: FC = () => {
 			setNoOyValuesErrorClassName(styles.noOyValuesError_hidden);
 		}
 	};
+
+	const [chartType, setChartType] = useState<'bar' | 'dot'>('dot');
 
 	return (
 		<>
@@ -90,6 +94,14 @@ export const Chart: FC = () => {
 				</div>
 
 				<p>
+					<label htmlFor="chart-type">тип диаграммы</label>
+					<select name="chart-type" id="chart-type" defaultValue={chartType}>
+						<option value="bar">Гистограмма</option>
+						<option value="dot">Точечная</option>
+					</select>
+				</p>
+
+				<p>
 					<button type="submit">Построить </button>
 				</p>
 
@@ -99,6 +111,7 @@ export const Chart: FC = () => {
 			</form>
 
 			<ChartDraw
+				chartType={chartType}
 				data={createArrGraph(currentBuildings, ox)}
 				isMaxValuesDrawEnabled={oy.maxValue}
 				isMinValuesDrawEnabled={oy.minValue}

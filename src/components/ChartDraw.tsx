@@ -8,140 +8,167 @@ interface ChartDrawProps {
 	}[];
 	isMaxValuesDrawEnabled: boolean;
 	isMinValuesDrawEnabled: boolean;
+	chartType: 'dot' | 'bar';
 }
 
 export const ChartDraw: FC<ChartDrawProps> = ({
 	data,
 	isMaxValuesDrawEnabled,
 	isMinValuesDrawEnabled,
+	chartType,
 }) => {
 	const chartRef = useRef<SVGSVGElement>(null);
+	const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-	const [width, setWidth] = useState(0);
-	const [height, setHeight] = useState(0);
-
-	// заносим в состояния ширину и высоту svg-элемента
+	// Используем useLayoutEffect, чтобы замерить контейнер сразу после вставки в DOM
 	useEffect(() => {
-		const svg = d3.select(chartRef.current);
+		if (chartRef.current) {
+			const { width, height } = chartRef.current.getBoundingClientRect();
+			setDimensions({ width, height });
+		}
+	}, []);
 
-		setWidth(parseFloat(svg.style('width')));
-		setHeight(parseFloat(svg.style('height')));
-	}, [setWidth, setHeight]);
+	const { width, height } = dimensions;
 
-	// задаем отступы в svg-элементе
-	const margin = {
-		top: 10,
-		bottom: 60,
-		left: 40,
-		right: 10,
-	};
+	const margin = useMemo(
+		() => ({
+			top: 20,
+			bottom: 60,
+			left: 50,
+			right: 20,
+		}),
+		[],
+	);
 
-	// вычисляем ширину и высоту области для вывода графиков
 	const boundsWidth = width - margin.left - margin.right;
 	const boundsHeight = height - margin.top - margin.bottom;
 
-	useEffect(() => {
-		const svg = d3.select(chartRef.current);
+	// Расчет лимитов оси Y
+	const [min, max] = useMemo(() => {
+		const allValues: number[] = [];
+		if (isMinValuesDrawEnabled) allValues.push(...data.map((d) => d.values[0]));
+		if (isMaxValuesDrawEnabled) allValues.push(...data.map((d) => d.values[1]));
 
-		svg
-			.append('circle')
-			.attr('r', 100)
-			.attr('cx', 200)
-			.attr('cy', 200)
-			.style('fill', 'red');
-	}, []);
+		if (allValues.length === 0) return [0, 100];
+		return d3.extent(allValues) as [number, number];
+	}, [data, isMinValuesDrawEnabled, isMaxValuesDrawEnabled]);
 
-	// const indexOY = 0; // диаграмма для максимальных значений
-	let [min, max] = d3.extent(data.map((d) => d.values[1])) as [number, number];
-
-	// формируем шкалы для осей
 	const scaleX = useMemo(() => {
 		return d3
 			.scaleBand()
 			.domain(data.map((d) => d.labelX.toString()))
-			.range([0, boundsWidth]);
+			.range([0, Math.max(0, boundsWidth)])
+			.padding(0.1);
 	}, [data, boundsWidth]);
 
 	const scaleY = useMemo(() => {
 		return d3
 			.scaleLinear()
-			.domain([min * 0.85, max * 1.1])
-			.range([boundsHeight, 0]);
-	}, [boundsHeight, min, max]);
+			.domain([min * 0.9, max * 1.1])
+			.range([Math.max(0, boundsHeight), 0]);
+	}, [min, max, boundsHeight]);
 
 	useEffect(() => {
-		if (!isMinValuesDrawEnabled && !isMaxValuesDrawEnabled) {
-			return;
-		}
+		if (width === 0 || height === 0) return;
 
 		const svg = d3.select(chartRef.current);
 		svg.selectAll('*').remove();
 
-		// рисуем оси
+		if (!isMinValuesDrawEnabled && !isMaxValuesDrawEnabled) return;
+
+		// Рисуем оси
 		const xAxis = d3.axisBottom(scaleX);
+		const yAxis = d3.axisLeft(scaleY);
+
 		svg
 			.append('g')
 			.attr('transform', `translate(${margin.left}, ${height - margin.bottom})`)
 			.call(xAxis)
 			.selectAll('text')
-			.style('text-anchor', 'end')
-			.attr('dx', '-.8em')
-			.attr('dy', '.15em')
-			.attr('transform', () => 'rotate(-30)');
+			.attr('transform', 'rotate(-45)')
+			.style('text-anchor', 'end');
 
-		const yAxis = d3.axisLeft(scaleY);
 		svg
 			.append('g')
 			.attr('transform', `translate(${margin.left}, ${margin.top})`)
 			.call(yAxis);
 
-		//рисуем график
-		// минимальные значения
-		if (isMinValuesDrawEnabled) {
-			svg
-				.selectAll('.dot')
-				.data(data)
-				.enter()
-				.append('circle')
-				.attr('r', 5)
-				.attr(
-					'cx',
-					(d) => scaleX(d.labelX.toString())! + scaleX.bandwidth() / 2,
-				)
-				.attr('cy', (d) => scaleY(d.values[0]))
-				.attr('transform', `translate(${margin.left}, ${margin.top})`)
-				.style('fill', 'blue');
-		}
+		const chartGroup = svg
+			.append('g')
+			.attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-		// максимальные значения
-		if (isMaxValuesDrawEnabled) {
-			svg
-				.selectAll('.dot')
-				.data(data)
-				.enter()
-				.append('circle')
-				.attr('r', 5)
-				.attr(
-					'cx',
-					(d) => scaleX(d.labelX.toString())! + scaleX.bandwidth() / 2,
-				)
-				.attr('cy', (d) => scaleY(d.values[1]) - 3)
-				.attr('transform', `translate(${margin.left}, ${margin.top})`)
-				.style('fill', 'rgba(255, 0, 0, 0.75)');
+		// Общая логика для колонок (как в твоем chart.js)
+		const activeSeries = [];
+		if (isMinValuesDrawEnabled)
+			activeSeries.push({ key: 0, color: 'blue', class: 'min' });
+		if (isMaxValuesDrawEnabled)
+			activeSeries.push({
+				key: 1,
+				color: 'rgba(255, 0, 0, 0.75)',
+				class: 'max',
+			});
 
-			return;
+		if (chartType === 'dot') {
+			activeSeries.forEach((series) => {
+				chartGroup
+					.selectAll(`.dot-${series.class}`)
+					.data(data)
+					.enter()
+					.append('circle')
+					.attr('r', 5)
+					.attr(
+						'cx',
+						(d) => scaleX(d.labelX.toString())! + scaleX.bandwidth() / 2,
+					)
+					.attr('cy', (d) => scaleY(d.values[series.key]))
+					.style('fill', series.color);
+			});
+		} else {
+			const groupPadding = 0.2;
+			const barGap = 2;
+			const groupWidth = scaleX.bandwidth() * (1 - groupPadding);
+			const groupOffset = (scaleX.bandwidth() - groupWidth) / 2;
+			const barWidth =
+				(groupWidth - barGap * (activeSeries.length - 1)) / activeSeries.length;
+
+			activeSeries.forEach((series, index) => {
+				chartGroup
+					.selectAll(`.bar-${series.class}`)
+					.data(data)
+					.enter()
+					.append('rect')
+					.attr(
+						'x',
+						(d) =>
+							scaleX(d.labelX.toString())! +
+							groupOffset +
+							index * (barWidth + barGap),
+					)
+					.attr('y', (d) => scaleY(d.values[series.key]))
+					.attr('width', Math.max(0, barWidth))
+					.attr('height', (d) =>
+						Math.max(0, boundsHeight - scaleY(d.values[series.key])),
+					)
+					.style('fill', series.color);
+			});
 		}
 	}, [
+		data,
+		width,
+		height,
+		chartType,
+		isMinValuesDrawEnabled,
+		isMaxValuesDrawEnabled,
 		scaleX,
 		scaleY,
-		data,
-		height,
-		margin.bottom,
-		margin.left,
-		margin.top,
-		isMaxValuesDrawEnabled,
-		isMinValuesDrawEnabled,
+		margin,
+		boundsHeight,
 	]);
 
-	return <svg ref={chartRef}></svg>;
+	return (
+		<svg
+			ref={chartRef}
+			style={{ width: '100%', height: '400px', display: 'block' }}
+		/>
+	);
 };
