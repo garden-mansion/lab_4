@@ -12,66 +12,31 @@ export const useFilterSubmitHandler = (resetCurrentPage: () => void) => {
 
 			const formData = new FormData(event.currentTarget);
 
-			// создаем словарь со значениями полей формы
-			const filterField: Pick<
-				Building,
-				'title' | 'buildType' | 'country' | 'city'
-			> & {
-				yearFrom: number;
-				yearTo: number;
-				heightFrom: number;
-				heightTo: number;
-			} = {
-				title: formData.get('title')!.toString().toLowerCase(),
-				buildType: formData.get('buildType')!.toString().toLowerCase(),
-				country: formData.get('country')!.toString().toLowerCase(),
-				city: formData.get('city')!.toString().toLowerCase(),
-
-				yearFrom: formData.get('year-from') ? +formData.get('year-from')! : 0,
-				yearTo: formData.get('year-to') ? +formData.get('year-to')! : 0,
-				heightFrom: formData.get('height-from')
-					? +formData.get('height-from')!
-					: 0,
-				heightTo: formData.get('height-to') ? +formData.get('height-to')! : 0,
-			};
-
 			//фильтруем данные по значениям всех полей формы
 			let arr: Building[] = [...allBuildings];
-			for (const key in filterField) {
-				if (
-					key !== 'title' &&
-					key !== 'buildType' &&
-					key !== 'country' &&
-					key !== 'city' &&
-					key !== 'yearFrom' &&
-					key !== 'yearTo' &&
-					key !== 'heightFrom' &&
-					key !== 'heightTo'
-				)
-					continue;
 
+			for (const [key, value] of formData.entries()) {
 				arr = arr.filter((item) => {
-					if (
-						key === 'buildType' ||
-						key === 'title' ||
-						key === 'country' ||
-						key === 'city'
-					) {
-						const stringCheckResult = item[key]
+					if (!key.endsWith('-to') && !key.endsWith('-from')) {
+						const stringCheckResult = (item[key as keyof Building] as string)
 							.toLowerCase()
-							.includes(filterField[key]);
+							.includes(value.toString().toLowerCase());
 
 						return stringCheckResult;
 					}
 					const year = item.year;
 					const height = item.height;
 
-					if (!filterField[key]) return true;
+					if (!value) {
+						return true;
+					}
 
-					if (key === 'yearFrom') return year >= filterField[key];
-					if (key === 'yearTo') return year <= filterField[key];
-					if (key === 'heightFrom') return height >= filterField[key];
-					if (key === 'heightTo') return height <= filterField[key];
+					const numberValue = +value.toString();
+
+					if (key === 'year-from') return year >= numberValue;
+					if (key === 'year-to') return year <= numberValue;
+					if (key === 'height-from') return height >= numberValue;
+					if (key === 'height-to') return height <= numberValue;
 				});
 			}
 
