@@ -23,7 +23,6 @@ const Table: FC<TableProps> = ({ amountRows, isPaginationEnabled }) => {
 	const { currentBuildings, allBuildings } = useBuildingsContext();
 	const n = Math.ceil(currentBuildings.length / amountRows);
 
-	// массив с номерами страниц
 	const arr = Array.from({ length: n }, (_, i) => i + 1);
 
 	const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +33,6 @@ const Table: FC<TableProps> = ({ amountRows, isPaginationEnabled }) => {
 		setCurrentPage(value);
 	};
 
-	// формируем совокупность span с номерами страниц
 	const pages = arr.map((item) => {
 		const className = [styles.pagination__item];
 

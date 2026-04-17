@@ -20,7 +20,6 @@ export const ChartDraw: FC<ChartDrawProps> = ({
 	const chartRef = useRef<SVGSVGElement>(null);
 	const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-	// чтобы замерить контейнер сразу после вставки в DOM
 	useEffect(() => {
 		if (chartRef.current) {
 			const { width, height } = chartRef.current.getBoundingClientRect();
@@ -43,7 +42,7 @@ export const ChartDraw: FC<ChartDrawProps> = ({
 	const boundsWidth = width - margin.left - margin.right;
 	const boundsHeight = height - margin.top - margin.bottom;
 
-	// расчет лимитов оси Y
+	// расчет лимитов оси y
 	const [min, max] = useMemo(() => {
 		const allValues: number[] = [];
 		if (isMinValuesDrawEnabled) allValues.push(...data.map((d) => d.values[0]));
@@ -76,7 +75,7 @@ export const ChartDraw: FC<ChartDrawProps> = ({
 
 		if (!isMinValuesDrawEnabled && !isMaxValuesDrawEnabled) return;
 
-		// Рисуем оси
+		// иисуем оси
 		const xAxis = d3.axisBottom(scaleX);
 		const yAxis = d3.axisLeft(scaleY);
 
@@ -97,7 +96,6 @@ export const ChartDraw: FC<ChartDrawProps> = ({
 			.append('g')
 			.attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-		// Общая логика для колонок (как в твоем chart.js)
 		const activeSeries = [];
 		if (isMinValuesDrawEnabled)
 			activeSeries.push({ key: 0, color: 'blue', class: 'min' });
